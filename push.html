@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>GCM送信</title>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+
+<script type="text/javascript">
+	$(function(){
+		$("#response").html("Response Values");
+
+		$("#button").click( function(){
+			var url = $("#url_post").val();
+
+			var JSONdata = {
+				registration_ids: { $("#registerid").val() },
+				data: {
+					title: $("#title").val(),
+					message: $("#message").val()
+				}
+			};
+
+			$.ajax({
+				type : 'post',
+				url : url,
+				data : JSON.stringify(JSONdata),
+				contentType: 'application/JSON',
+				dataType : 'JSON',
+				headers: {
+					"Authorization": "key=" + $("#apikey").val()
+				},
+				scriptCharset: 'utf-8',
+				success : function(data) {
+					// Success
+					$("#response").html(JSON.stringify(data));
+				},
+				error : function(data) {
+					// Error
+					$("#response").html(JSON.stringify(data));
+				}
+			});
+		})
+	})
+</script>
+
+</head>
+<body>
+	<h1>Android GCM通知</h1>
+	<p>URL: <input type="text" id="url_post" name="url" size="100" value="https://gcm-http.googleapis.com/gcm/send"></p>
+	<p>APIkey: <input type="text" id="url_post" name="apikey" size="100" value="AIzaSyBXDLC56f5xxr_havdUZXGwDS3FUnm2mz4"></p>
+	<p>title: <input type="text" id="title" size="30" value="GCMTest"></p>
+	<p>message: <input type="text" id="message" size="30" value="GCM通知です"></p>
+	<p>registrationId: <input type="text" id="registerid" size="100" value=""></p>
+	<p><button id="button" type="button">送信</button></p>
+	<textarea id="response" cols=120 rows=10 disabled></textarea>
+</body>
+</html>
