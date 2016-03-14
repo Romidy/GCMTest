@@ -9,9 +9,33 @@
     tools:context="jp.co.iti.glan8.gcmtest.MainActivityFragment"
     tools:showIn="@layout/activity_main">
 
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="GCM登録"
+        android:id="@+id/registerBtn"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="32dp" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:background="@drawable/test_style"
+        android:text=""
+        android:id="@+id/registerText"
+        android:layout_below="@+id/registerBtn"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="45dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="レジストレーションID"
+        android:id="@+id/label"
+        android:layout_alignTop="@+id/registerText"
+        android:layout_toLeftOf="@+id/registerText"
+        android:layout_toStartOf="@+id/registerText" />
 
 </RelativeLayout>

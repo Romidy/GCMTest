@@ -8,16 +8,15 @@ import android.os.Looper;
 import android.util.Log;
 
 /**
- * GCMのRegistrationIdの登録・登録解除を処理をするサービス。
- * <li>アプリサーバへ登録・登録解除処理を行う。</li>
+ * GCMのRegistrationIdの登録・登録解除を処理をするサービス
  *
- * @author kotemaru@kotemaru.org
  */
 public class GCMRegisterService extends IntentService {
-    private static final String SENDER_ID = "329383810024";
+
+    // https://console.developers.google.comのProject Number。
+    public static final String SENDER_ID = "329383810024";
 
     private static final String TAG = GCMRegisterService.class.getSimpleName();
-    private Handler toaster = new Handler(Looper.getMainLooper());
 
     public GCMRegisterService() {
         super("GCMRegisterService");
@@ -26,5 +25,10 @@ public class GCMRegisterService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         String regId = GCMRegister.registerSync(this, SENDER_ID);
+
+        Intent broadcastIntent = new Intent();
+        broadcastIntent.putExtra(GCMReceiver.BROADCAST_MESSAGE_ID, regId);
+        broadcastIntent.setAction(GCMReceiver.BROADCAST_ACTION_ID);
+        getBaseContext().sendBroadcast(broadcastIntent);
     }
 }

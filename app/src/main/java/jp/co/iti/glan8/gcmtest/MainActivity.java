@@ -1,25 +1,28 @@
 package jp.co.iti.glan8.gcmtest;
 
-import android.content.Context;
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.content.Intent;
-import android.os.AsyncTask;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.TextView;
 
-import com.google.android.gms.gcm.GoogleCloudMessaging;
-
-import java.io.IOException;
-
+/**
+ */
 public class MainActivity extends AppCompatActivity {
 
-    private final String GCM_SENDER_ID = "329383810024";
+    private IntentFilter intentFilter;
+    private GCMReceiver upGCMReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,10 +40,42 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // GCMへ端末登録。
-        Intent intent = new Intent(this, GCMRegisterService.class);
-        startService(intent);
+        Button button = (Button) findViewById(R.id.registerBtn);
+        // ボタンに OnClickListener インターフェースを実装する
+        button.setOnClickListener(new View.OnClickListener() {
+            // クリック時に呼ばれるメソッド
+            @Override
+            public void onClick(View view) {
+                final String regId = GCMRegister.getRegistrationId(MainActivity.this);
+                if (regId == null || regId.isEmpty()) {
+                    // GCMへ端末登録
+                    Intent intent = new Intent(MainActivity.this, GCMRegisterService.class);
+                    startService(intent);
+                }
+            }
+        });
+
+        TextView text = (TextView) findViewById(R.id.registerText);
+        text.setText(GCMRegister.getRegistrationId(this));
+
+        upGCMReceiver = new GCMReceiver();
+        intentFilter = new IntentFilter();
+        intentFilter.addAction(GCMReceiver.BROADCAST_ACTION_ID);
+        registerReceiver(upGCMReceiver, intentFilter);
+
+        upGCMReceiver.registerHandler(updateHandler);
+
     }
+
+    private Handler updateHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+
+            String regId = msg.getData().getString(GCMReceiver.BROADCAST_MESSAGE_ID);
+            TextView text = (TextView) findViewById(R.id.registerText);
+            text.setText(regId);
+        }
+    };
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

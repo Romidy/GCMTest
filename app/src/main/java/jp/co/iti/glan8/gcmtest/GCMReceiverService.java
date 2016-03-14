@@ -1,5 +1,6 @@
 package jp.co.iti.glan8.gcmtest;
 
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -46,16 +47,27 @@ public class GCMReceiverService extends GcmListenerService {
     }
 
     private void sendNotification(String title, String msg) {
-        notificationManager = (NotificationManager)
-                this.getSystemService(Context.NOTIFICATION_SERVICE);
+        //notification
+        Notification notification = new Notification.Builder(this)
+                .setContentTitle("Title!")
+                .setContentText("Content Text!")
+                .setAutoCancel(true)
+                .setSmallIcon(android.R.mipmap.sym_def_app_icon)
+                .build();
 
-        PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-                new Intent(this, MainActivity.class), 0);
+        NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        manager.notify(0, notification);
 
-        builder = new NotificationCompat.Builder(this).setContentTitle("GCM Notification").setStyle(new NotificationCompat.BigTextStyle().bigText(title)).setContentText(msg);
-
-        builder.setContentIntent(contentIntent);
-        notificationManager.notify(NOTIFICATION_ID, builder.build());
+//        notificationManager = (NotificationManager)
+//                this.getSystemService(Context.NOTIFICATION_SERVICE);
+//
+//        PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
+//                new Intent(this, MainActivity.class), 0);
+//
+//        builder = new NotificationCompat.Builder(this).setContentTitle("GCM Notification").setStyle(new NotificationCompat.BigTextStyle().bigText(title)).setContentText(msg);
+//
+//        builder.setContentIntent(contentIntent);
+//        notificationManager.notify(NOTIFICATION_ID, builder.build());
     }
 
 }
