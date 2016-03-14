@@ -49,10 +49,10 @@ public class GCMReceiverService extends GcmListenerService {
     private void sendNotification(String title, String msg) {
         //notification
         Notification notification = new Notification.Builder(this)
-                .setContentTitle("Title!")
-                .setContentText("Content Text!")
+                .setContentTitle(title)
+                .setContentText(msg)
                 .setAutoCancel(true)
-                .setSmallIcon(android.R.mipmap.sym_def_app_icon)
+                .setSmallIcon(R.mipmap.ic_launcher)
                 .build();
 
         NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
